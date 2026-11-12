@@ -127,6 +127,8 @@ import { buildSessionTitle, isOldStyleTitle } from './session-title'
 import { buildQuickPrompt } from '@shared/quick-actions'
 
 const DEFAULT_TITLE = 'New chat'
+/** Bump when buildSessionTitle changes so the boot backfill re-titles chats. */
+const TITLE_RULES_VERSION = 1
 
 /** The exact dialog answer that lets a send continue past a budget cap. */
 export const BUDGET_CONTINUE_OPTION = 'Continue this time'
@@ -4367,12 +4369,12 @@ export class ChatService {
   }
 
   /**
-   * One-shot boot pass: replace titles written by the old raw-first-line rule
+   * Versioned boot pass: replace titles written by the old raw-first-line rule
    * with condensed labels. Manual renames and any other title stay put.
    */
   backfillSessionTitles(): void {
     try {
-      if (this.db.settings.get().sessionTitlesBackfilled) return
+      if (this.db.settings.get().sessionTitleVersion >= TITLE_RULES_VERSION) return
       for (const row of this.db.conversations.listForTitleBackfill()) {
         if (!row.firstUserContent) continue
         if (row.title !== DEFAULT_TITLE && !isOldStyleTitle(row.title, row.firstUserContent)) {
@@ -4383,7 +4385,7 @@ export class ChatService {
           this.db.conversations.setTitle(row.id, title)
         }
       }
-      this.db.settings.update({ sessionTitlesBackfilled: true })
+      this.db.settings.update({ sessionTitleVersion: TITLE_RULES_VERSION })
     } catch {
       // Cosmetic; a failed pass retries on the next launch.
     }

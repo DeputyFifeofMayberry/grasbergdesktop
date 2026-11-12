@@ -67,7 +67,7 @@ describe('ChatService.backfillSessionTitles', () => {
     expect(db.conversations.getById(placeholder)?.title).toBe('Add CSV export to the reports page')
     expect(db.conversations.getById(manual)?.title).toBe('My custom name')
     expect(db.conversations.getById(empty)?.title).toBe('New chat')
-    expect(db.settings.get().sessionTitlesBackfilled).toBe(true)
+    expect(db.settings.get().sessionTitleVersion).toBe(1)
   })
 
   it('runs only once', () => {

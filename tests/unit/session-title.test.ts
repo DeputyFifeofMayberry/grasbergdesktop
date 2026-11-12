@@ -26,6 +26,23 @@ describe('buildSessionTitle', () => {
     ['Task: update the relay docs', 'Update the relay docs'],
     ['please update the docs for', 'Update the docs'],
     ['Corrige el error de sincronización en el móvil', 'Corrige el error de sincronización en el móvil'],
+    [
+      'remove the inbox plugin thing from opencode i dont want it anymore',
+      'Remove the inbox plugin from OpenCode',
+    ],
+    [
+      "remove global installation for gsd-core. i don't want it anymore",
+      'Remove global installation for gsd-core',
+    ],
+    [
+      'i really like the planning and spec phases of the gsd core method. is there a way',
+      'The planning and spec phases of the GSD Core method',
+    ],
+    ['fix the sidebar thing', 'Fix the sidebar'],
+    ['add a retry because the relay drops frames', 'Add a retry'],
+    ['fix the API url in settings', 'Fix the API URL in settings'],
+    ['fix the bug i found in the relay', 'Fix the bug I found in the relay'],
+    ['just update the docs', 'Update the docs'],
   ]
 
   it.each(cases)('%s -> %s', (input, expected) => {

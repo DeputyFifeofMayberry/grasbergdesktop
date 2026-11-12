@@ -1228,11 +1228,12 @@ export interface AppSettings {
    */
   desktopControlEnabled: boolean
   /**
-   * Internal one-shot marker: titles written by the old raw-first-line rule
-   * have been rewritten to condensed labels. Main-owned; absent from
-   * settingsPatchSchema so the renderer and backups cannot set it.
+   * Internal marker: the title-condensing rules version applied by the
+   * backfill. Main-owned; absent from settingsPatchSchema so the renderer
+   * and backups cannot set it. Bump it when the rules change so existing
+   * chats are re-titled on the next launch.
    */
-  sessionTitlesBackfilled: boolean
+  sessionTitleVersion: number
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -1307,7 +1308,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   autoReview: 'autonomous',
   anomalyMonitorEnabled: true,
   desktopControlEnabled: false,
-  sessionTitlesBackfilled: false,
+  sessionTitleVersion: 0,
 }
 
 /**
