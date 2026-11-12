@@ -148,6 +148,18 @@ const NAME_RE = new RegExp(
   'gi'
 )
 
+/** Stiff noun phrases that read better with the object first. */
+const PHRASE_REWRITES: Array<[RegExp, string]> = [
+  [/\binstallation (?:for|of) ([A-Za-z0-9-]+)\b/gi, '$1 installation'],
+]
+
+function applyPhrases(text: string): string {
+  return PHRASE_REWRITES.reduce(
+    (out, [pattern, replacement]) => out.replace(pattern, replacement),
+    text
+  )
+}
+
 function cleanPrompt(text: string): string {
   return text
     .replace(/```[\s\S]*?```/g, ' ')
@@ -220,7 +232,10 @@ function polish(text: string): string {
 }
 
 function finish(text: string): string {
-  return polish(applyNames(dropFiller(trimCasualTail(text))))
+  const polished = polish(
+    applyNames(applyPhrases(dropFiller(trimCasualTail(text))))
+  )
+  return polished.replace(/^(?:the|an?)\s+/i, '')
 }
 
 /** Cut at the last word boundary, never mid-word. Counts code points so a

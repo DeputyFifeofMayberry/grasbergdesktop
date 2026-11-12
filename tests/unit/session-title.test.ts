@@ -16,7 +16,7 @@ describe('buildSessionTitle', () => {
       'Please investigate why the relay drops frames. Also check logs.',
       'Investigate why the relay drops frames',
     ],
-    ['the app is slow', 'The app is slow'],
+    ['the app is slow', 'App is slow'],
     ['', ''],
     ['please', ''],
     ['fix the spinner.', 'Fix the spinner'],
@@ -36,11 +36,11 @@ describe('buildSessionTitle', () => {
     ],
     [
       "remove global installation for gsd-core. i don't want it anymore",
-      'Remove global installation for gsd-core',
+      'Remove global gsd-core installation',
     ],
     [
       'i really like the planning and spec phases of the gsd core method. is there a way',
-      'The planning and spec phases of the GSD Core method',
+      'Planning and spec phases of the GSD Core method',
     ],
     ['fix the sidebar thing', 'Fix the sidebar'],
     ['add a retry because the relay drops frames', 'Add a retry'],
