@@ -6,6 +6,7 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactElement,
+  type ReactNode,
 } from 'react'
 import type { Attachment, FailoverReason, Message, MoaReferenceOutput } from '@shared/types'
 import { estimateCost, findPricing, formatCost, PRICING_DISCLAIMER } from '@shared/pricing'
@@ -138,10 +139,38 @@ function AttachmentChip({
   )
 }
 
+/** The hover row under a message: the copy button plus any inline actions. */
+function MessageActions({
+  message,
+  canCopy,
+  children,
+}: {
+  message: Message
+  canCopy: boolean
+  children?: ReactNode
+}): ReactElement {
+  const [copied, copy] = useCopied()
+  return (
+    <div className="msg-actions" role="toolbar" aria-label="Message actions">
+      {canCopy && (
+        <button
+          type="button"
+          className="btn-icon msg-action"
+          aria-label={copied ? 'Copied' : 'Copy message'}
+          title="Copy"
+          onClick={() => copy(message.content)}
+        >
+          {copied ? '✓' : '⧉'}
+        </button>
+      )}
+      {children}
+    </div>
+  )
+}
+
 function UserMessage({ message }: { message: Message }): ReactElement {
   const editAndRerun = useChatStore((s) => s.editAndRerun)
   const streaming = useChatStore((s) => s.streaming)
-  const [copied, copy] = useCopied()
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(message.content)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -206,16 +235,7 @@ function UserMessage({ message }: { message: Message }): ReactElement {
         )}
       </div>
       {!editing && (
-        <div className="msg-actions" role="toolbar" aria-label="Message actions">
-          <button
-            type="button"
-            className="btn-icon msg-action"
-            aria-label={copied ? 'Copied' : 'Copy message'}
-            title="Copy"
-            onClick={() => copy(message.content)}
-          >
-            {copied ? '✓' : '⧉'}
-          </button>
+        <MessageActions message={message} canCopy>
           <button
             type="button"
             className="btn-icon msg-action"
@@ -227,7 +247,7 @@ function UserMessage({ message }: { message: Message }): ReactElement {
             ✎
           </button>
           <ForkAction message={message} />
-        </div>
+        </MessageActions>
       )}
     </div>
   )
@@ -687,7 +707,6 @@ function AssistantMessage({ message, isLast }: MessageItemProps): ReactElement {
   const regenerate = useChatStore((s) => s.regenerate)
   const streaming = useChatStore((s) => s.streaming)
   const readAloudOn = useSettingsStore((s) => s.settings?.voiceReadAloudEnabled === true)
-  const [copied, copy] = useCopied()
   const [reasoningOpen, setReasoningOpen] = useState(false)
 
   const isStreaming = message.status === 'streaming'
@@ -832,19 +851,10 @@ function AssistantMessage({ message, isLast }: MessageItemProps): ReactElement {
           )}
       </div>
       {(!isStreaming || readAloudOn) && (
-        <div className="msg-actions" role="toolbar" aria-label="Message actions">
+        <MessageActions message={message} canCopy={!isStreaming}>
           <ReadAloudAction message={message} />
           {!isStreaming && (
             <>
-              <button
-                type="button"
-                className="btn-icon msg-action"
-                aria-label={copied ? 'Copied' : 'Copy message'}
-                title="Copy"
-                onClick={() => copy(message.content)}
-              >
-                {copied ? '✓' : '⧉'}
-              </button>
               {isLast && (
                 <>
                   <button
@@ -865,7 +875,7 @@ function AssistantMessage({ message, isLast }: MessageItemProps): ReactElement {
               <FeedbackActions message={message} />
             </>
           )}
-        </div>
+        </MessageActions>
       )}
     </div>
   )

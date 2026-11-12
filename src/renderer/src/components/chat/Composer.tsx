@@ -1000,214 +1000,7 @@ export default function Composer(): ReactElement {
         </div>
       )}
 
-      <div className="composer-inputrow">
-        <button
-          type="button"
-          className="btn-icon composer-attach-button"
-          aria-label="Add files or photos"
-          title="Add files or photos"
-          disabled={!conversation || loadedDraftId !== conversation.id || isStreaming}
-          onClick={() => void handleAttach()}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m20.5 11.5-8.7 8.7a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7L9 17.4a2 2 0 0 1-2.8-2.8l8.6-8.6" />
-          </svg>
-        </button>
-        <div className="composer-plus">
-          <button
-            type="button"
-            className={`btn-icon composer-plus-button${plusMenuOpen ? ' open' : ''}`}
-            aria-label="Open tools and modes"
-            title="Choose tools and modes"
-            aria-haspopup="menu"
-            aria-expanded={plusMenuOpen}
-            disabled={!conversation || loadedDraftId !== conversation.id || isStreaming}
-            onClick={() => setPlusMenuOpen((open) => !open)}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 2.5v11M2.5 8h11" />
-            </svg>
-          </button>
-          {plusMenuOpen ? (
-            <>
-              <div
-                className="composer-plus-backdrop"
-                aria-hidden
-                onClick={() => setPlusMenuOpen(false)}
-              />
-              <div className="composer-plus-menu" role="menu" aria-label="Tools and modes">
-                {promptTemplates.length > 0 ? (
-                  <>
-                    <div className="composer-plus-heading">Saved prompts</div>
-                    {promptTemplates.map((template) => (
-                      <button
-                        key={template.id}
-                        type="button"
-                        role="menuitem"
-                        className="composer-plus-item composer-plus-prompt"
-                        title={template.body}
-                        onClick={() => insertPrompt(template.body)}
-                      >
-                        <span className="composer-plus-icon" aria-hidden>⚡</span>
-                        <span>{template.title}</span>
-                      </button>
-                    ))}
-                    <div className="composer-plus-separator" />
-                  </>
-                ) : null}
-                <button
-                  type="button"
-                  role="menuitemcheckbox"
-                  aria-checked={researchOn}
-                  className="composer-plus-item"
-                  onClick={() => setResearchOn((value) => {
-                    if (!value) setCompareOn(false)
-                    return !value
-                  })}
-                >
-                  <span className="composer-plus-check" aria-hidden>{researchOn ? '✓' : ''}</span>
-                  <span>Deep Research</span>
-                </button>
-                {researchOn ? (
-                  <label className="composer-plus-subcontrol">
-                    <span>Depth</span>
-                    <select
-                      value={researchDepth}
-                      onChange={(e) => setResearchDepth(e.target.value as ResearchDepth | '')}
-                    >
-                      <option value="">{settings?.researchDefaultDepth ?? 'standard'} (default)</option>
-                      <option value="quick">quick</option>
-                      <option value="standard">standard</option>
-                      <option value="deep">deep</option>
-                    </select>
-                  </label>
-                ) : null}
-                {enabledPresets.length > 0 ? (
-                  <>
-                    <button
-                      type="button"
-                      role="menuitemcheckbox"
-                      aria-checked={!!activePreset}
-                      className="composer-plus-item"
-                      onClick={toggleMoa}
-                    >
-                      <span className="composer-plus-check" aria-hidden>{activePreset ? '✓' : ''}</span>
-                      <span>Mixture of Agents</span>
-                    </button>
-                    {activePreset && enabledPresets.length > 1 ? (
-                      <label className="composer-plus-subcontrol">
-                        <span>Preset</span>
-                        <select
-                          value={activePreset.id}
-                          onChange={(e) => void updateConversation({ moaPresetId: e.target.value })}
-                        >
-                          {enabledPresets.map((preset) => (
-                            <option key={preset.id} value={preset.id}>{preset.name}</option>
-                          ))}
-                        </select>
-                      </label>
-                    ) : null}
-                    <button
-                      type="button"
-                      role="menuitemcheckbox"
-                      aria-checked={compareOn}
-                      className="composer-plus-item"
-                      disabled={!comparePreset}
-                      onClick={() => setCompareOn((value) => {
-                        if (!value) setResearchOn(false)
-                        return !value
-                      })}
-                    >
-                      <span className="composer-plus-check" aria-hidden>{compareOn ? '✓' : ''}</span>
-                      <span>Compare models (VS)</span>
-                    </button>
-                  </>
-                ) : null}
-                {conversation?.mode === 'work' ? (
-                  <button
-                    type="button"
-                    role="menuitemcheckbox"
-                    aria-checked={conversation.params.planMode === true}
-                    className="composer-plus-item"
-                    disabled={planBusy}
-                    onClick={() => void togglePlanMode()}
-                  >
-                    <span className="composer-plus-check" aria-hidden>
-                      {conversation.params.planMode === true ? '✓' : ''}
-                    </span>
-                    <span>Plan Mode</span>
-                  </button>
-                ) : null}
-                {conversation?.mode === 'work' ? (
-                  <label
-                    className="composer-plus-subcontrol"
-                    title={
-                      'read-only: the assistant may only investigate — every mutating tool is refused. ' +
-                      'workspace-write: audited file tools may write only inside the granted folder (default); shell is off. ' +
-                      'full: enables an unrestricted host shell (each call still asks).'
-                    }
-                  >
-                    <span>Sandbox</span>
-                    <select
-                      value={conversation.params.sandboxLevel ?? 'workspace-write'}
-                      onChange={(e) => void setSandboxLevel(e.target.value as SandboxLevel)}
-                    >
-                      <option value="read-only">read-only</option>
-                      <option value="workspace-write">workspace-write</option>
-                      <option value="full">full</option>
-                    </select>
-                  </label>
-                ) : null}
-              </div>
-            </>
-          ) : null}
-        </div>
-        {conversation?.mode === 'work' ? (
-          <button
-            type="button"
-            className={`composer-autoaccept${conversation.params.autoAcceptEdits === true ? ' active' : ''}`}
-            aria-pressed={conversation.params.autoAcceptEdits === true}
-            title="Apply assistant file edits without asking for each edit"
-            disabled={autoAcceptBusy || isStreaming}
-            onClick={() => void toggleAutoAcceptEdits()}
-          >
-            Auto-accept edits
-          </button>
-        ) : null}
-        {(slashVisible || mentionVisible) && (
-          <ul
-            className="composer-suggest"
-            role="listbox"
-            aria-label={slashVisible ? 'Commands' : botChatAgentId ? 'Teammates' : 'Project files'}
-          >
-            {slashVisible
-              ? filteredSlash.map((item, i) => (
-                  <li key={item.command} role="option" aria-selected={i === suggestIndex}>
-                    <button
-                      type="button"
-                      className={`composer-suggest-item${i === suggestIndex ? ' active' : ''}`}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => pickSlash(item)}
-                    >
-                      <span className="composer-suggest-name mono">{item.label}</span>
-                      <span className="composer-suggest-desc">{item.description}</span>
-                    </button>
-                  </li>
-                ))
-              : mentionItems.map((relPath, i) => (
-                  <li key={relPath} role="option" aria-selected={i === suggestIndex}>
-                    <button
-                      type="button"
-                      className={`composer-suggest-item${i === suggestIndex ? ' active' : ''}`}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => pickMention(relPath)}
-                    >
-                      <span className="composer-suggest-name mono">{relPath}</span>
-                    </button>
-                  </li>
-                ))}
-          </ul>
-        )}
+      <div className="composer-shell">
         <div className="composer-textarea-wrap">
           <textarea
             ref={textareaRef}
@@ -1264,70 +1057,283 @@ export default function Composer(): ReactElement {
               }
             }}
           />
-          <ModelSelector placement="composer" />
         </div>
-        {micAvailable ? (
-          <button
-            type="button"
-            className={`btn-icon composer-mic${recState === 'recording' ? ' recording' : ''}`}
-            aria-label={
-              recState === 'recording'
-                ? 'Stop recording and transcribe'
-                : recState === 'transcribing'
-                  ? 'Transcribing'
-                  : 'Dictate a message'
-            }
-            title={
-              recState === 'recording'
-                ? 'Stop recording and transcribe (Esc cancels)'
-                : recState === 'transcribing'
-                  ? 'Transcribing…'
-                  : 'Dictate a message (offline)'
-            }
-            disabled={!conversation || loadedDraftId !== conversation.id || isStreaming || recState === 'transcribing'}
-            onClick={() => void toggleRecording()}
-          >
-            {recState === 'transcribing' ? (
-              <span className="composer-mic-busy" aria-hidden>
-                …
-              </span>
-            ) : (
+        <div className="composer-footer">
+          <div className="composer-footer-left">
+            <button
+              type="button"
+              className="btn-icon composer-attach-button"
+              aria-label="Add files or photos"
+              title="Add files or photos"
+              disabled={!conversation || loadedDraftId !== conversation.id || isStreaming}
+              onClick={() => void handleAttach()}
+            >
               <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" />
-                <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" />
+                <path d="m20.5 11.5-8.7 8.7a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7L9 17.4a2 2 0 0 1-2.8-2.8l8.6-8.6" />
               </svg>
-            )}
-            {recState === 'recording' ? (
-              <span className="composer-mic-time">
-                {Math.floor(recSeconds / 60)}:{String(recSeconds % 60).padStart(2, '0')}
-              </span>
+            </button>
+            <div className="composer-plus">
+              <button
+                type="button"
+                className={`btn-icon composer-plus-button${plusMenuOpen ? ' open' : ''}`}
+                aria-label="Open tools and modes"
+                title="Choose tools and modes"
+                aria-haspopup="menu"
+                aria-expanded={plusMenuOpen}
+                disabled={!conversation || loadedDraftId !== conversation.id || isStreaming}
+                onClick={() => setPlusMenuOpen((open) => !open)}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 2.5v11M2.5 8h11" />
+                </svg>
+              </button>
+              {plusMenuOpen ? (
+                <>
+                  <div
+                    className="composer-plus-backdrop"
+                    aria-hidden
+                    onClick={() => setPlusMenuOpen(false)}
+                  />
+                  <div className="composer-plus-menu" role="menu" aria-label="Tools and modes">
+                    {promptTemplates.length > 0 ? (
+                      <>
+                        <div className="composer-plus-heading">Saved prompts</div>
+                        {promptTemplates.map((template) => (
+                          <button
+                            key={template.id}
+                            type="button"
+                            role="menuitem"
+                            className="composer-plus-item composer-plus-prompt"
+                            title={template.body}
+                            onClick={() => insertPrompt(template.body)}
+                          >
+                            <span className="composer-plus-icon" aria-hidden>⚡</span>
+                            <span>{template.title}</span>
+                          </button>
+                        ))}
+                        <div className="composer-plus-separator" />
+                      </>
+                    ) : null}
+                    <button
+                      type="button"
+                      role="menuitemcheckbox"
+                      aria-checked={researchOn}
+                      className="composer-plus-item"
+                      onClick={() => setResearchOn((value) => {
+                        if (!value) setCompareOn(false)
+                        return !value
+                      })}
+                    >
+                      <span className="composer-plus-check" aria-hidden>{researchOn ? '✓' : ''}</span>
+                      <span>Deep Research</span>
+                    </button>
+                    {researchOn ? (
+                      <label className="composer-plus-subcontrol">
+                        <span>Depth</span>
+                        <select
+                          value={researchDepth}
+                          onChange={(e) => setResearchDepth(e.target.value as ResearchDepth | '')}
+                        >
+                          <option value="">{settings?.researchDefaultDepth ?? 'standard'} (default)</option>
+                          <option value="quick">quick</option>
+                          <option value="standard">standard</option>
+                          <option value="deep">deep</option>
+                        </select>
+                      </label>
+                    ) : null}
+                    {enabledPresets.length > 0 ? (
+                      <>
+                        <button
+                          type="button"
+                          role="menuitemcheckbox"
+                          aria-checked={!!activePreset}
+                          className="composer-plus-item"
+                          onClick={toggleMoa}
+                        >
+                          <span className="composer-plus-check" aria-hidden>{activePreset ? '✓' : ''}</span>
+                          <span>Mixture of Agents</span>
+                        </button>
+                        {activePreset && enabledPresets.length > 1 ? (
+                          <label className="composer-plus-subcontrol">
+                            <span>Preset</span>
+                            <select
+                              value={activePreset.id}
+                              onChange={(e) => void updateConversation({ moaPresetId: e.target.value })}
+                            >
+                              {enabledPresets.map((preset) => (
+                                <option key={preset.id} value={preset.id}>{preset.name}</option>
+                              ))}
+                            </select>
+                          </label>
+                        ) : null}
+                        <button
+                          type="button"
+                          role="menuitemcheckbox"
+                          aria-checked={compareOn}
+                          className="composer-plus-item"
+                          disabled={!comparePreset}
+                          onClick={() => setCompareOn((value) => {
+                            if (!value) setResearchOn(false)
+                            return !value
+                          })}
+                        >
+                          <span className="composer-plus-check" aria-hidden>{compareOn ? '✓' : ''}</span>
+                          <span>Compare models (VS)</span>
+                        </button>
+                      </>
+                    ) : null}
+                    {conversation?.mode === 'work' ? (
+                      <button
+                        type="button"
+                        role="menuitemcheckbox"
+                        aria-checked={conversation.params.planMode === true}
+                        className="composer-plus-item"
+                        disabled={planBusy}
+                        onClick={() => void togglePlanMode()}
+                      >
+                        <span className="composer-plus-check" aria-hidden>
+                          {conversation.params.planMode === true ? '✓' : ''}
+                        </span>
+                        <span>Plan Mode</span>
+                      </button>
+                    ) : null}
+                    {conversation?.mode === 'work' ? (
+                      <label
+                        className="composer-plus-subcontrol"
+                        title={
+                          'read-only: the assistant may only investigate — every mutating tool is refused. ' +
+                          'workspace-write: audited file tools may write only inside the granted folder (default); shell is off. ' +
+                          'full: enables an unrestricted host shell (each call still asks).'
+                        }
+                      >
+                        <span>Sandbox</span>
+                        <select
+                          value={conversation.params.sandboxLevel ?? 'workspace-write'}
+                          onChange={(e) => void setSandboxLevel(e.target.value as SandboxLevel)}
+                        >
+                          <option value="read-only">read-only</option>
+                          <option value="workspace-write">workspace-write</option>
+                          <option value="full">full</option>
+                        </select>
+                      </label>
+                    ) : null}
+                  </div>
+                </>
+              ) : null}
+            </div>
+            {conversation?.mode === 'work' ? (
+              <button
+                type="button"
+                className={`composer-autoaccept${conversation.params.autoAcceptEdits === true ? ' active' : ''}`}
+                aria-pressed={conversation.params.autoAcceptEdits === true}
+                title="Apply assistant file edits without asking for each edit"
+                disabled={autoAcceptBusy || isStreaming}
+                onClick={() => void toggleAutoAcceptEdits()}
+              >
+                Auto-accept edits
+              </button>
             ) : null}
-          </button>
-        ) : null}
-        {micAvailable ? (
-          <VoiceCallButton disabled={!conversation || loadedDraftId !== conversation.id || recState !== 'idle'} />
-        ) : null}
-        {isStreaming ? (
-          <button
-            type="button"
-            className="btn btn-danger composer-send"
-            aria-label="Stop generating"
-            onClick={() => void stop()}
-          >
-            Stop
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="btn btn-primary composer-send"
-            aria-label="Send message"
-            disabled={sending || disabled || !conversation || loadedDraftId !== conversation.id || (!value.trim() && attachments.length === 0)}
-            aria-busy={sending}
-            onClick={submit}
-          >
-            Send
-          </button>
-        )}
+          </div>
+          {(slashVisible || mentionVisible) && (
+            <ul
+              className="composer-suggest"
+              role="listbox"
+              aria-label={slashVisible ? 'Commands' : botChatAgentId ? 'Teammates' : 'Project files'}
+            >
+              {slashVisible
+                ? filteredSlash.map((item, i) => (
+                    <li key={item.command} role="option" aria-selected={i === suggestIndex}>
+                      <button
+                        type="button"
+                        className={`composer-suggest-item${i === suggestIndex ? ' active' : ''}`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickSlash(item)}
+                      >
+                        <span className="composer-suggest-name mono">{item.label}</span>
+                        <span className="composer-suggest-desc">{item.description}</span>
+                      </button>
+                    </li>
+                  ))
+                : mentionItems.map((relPath, i) => (
+                    <li key={relPath} role="option" aria-selected={i === suggestIndex}>
+                      <button
+                        type="button"
+                        className={`composer-suggest-item${i === suggestIndex ? ' active' : ''}`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickMention(relPath)}
+                      >
+                        <span className="composer-suggest-name mono">{relPath}</span>
+                      </button>
+                    </li>
+                  ))}
+            </ul>
+          )}
+          <div className="composer-footer-right">
+            <ModelSelector placement="composer" />
+            {micAvailable ? (
+              <button
+                type="button"
+                className={`btn-icon composer-mic${recState === 'recording' ? ' recording' : ''}`}
+                aria-label={
+                  recState === 'recording'
+                    ? 'Stop recording and transcribe'
+                    : recState === 'transcribing'
+                      ? 'Transcribing'
+                      : 'Dictate a message'
+                }
+                title={
+                  recState === 'recording'
+                    ? 'Stop recording and transcribe (Esc cancels)'
+                    : recState === 'transcribing'
+                      ? 'Transcribing…'
+                      : 'Dictate a message (offline)'
+                }
+                disabled={!conversation || loadedDraftId !== conversation.id || isStreaming || recState === 'transcribing'}
+                onClick={() => void toggleRecording()}
+              >
+                {recState === 'transcribing' ? (
+                  <span className="composer-mic-busy" aria-hidden>
+                    …
+                  </span>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" />
+                    <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" />
+                  </svg>
+                )}
+                {recState === 'recording' ? (
+                  <span className="composer-mic-time">
+                    {Math.floor(recSeconds / 60)}:{String(recSeconds % 60).padStart(2, '0')}
+                  </span>
+                ) : null}
+              </button>
+            ) : null}
+            {micAvailable ? (
+              <VoiceCallButton disabled={!conversation || loadedDraftId !== conversation.id || recState !== 'idle'} />
+            ) : null}
+            {isStreaming ? (
+              <button
+                type="button"
+                className="btn btn-danger composer-send"
+                aria-label="Stop generating"
+                onClick={() => void stop()}
+              >
+                Stop
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-primary composer-send"
+                aria-label="Send message"
+                disabled={sending || disabled || !conversation || loadedDraftId !== conversation.id || (!value.trim() && attachments.length === 0)}
+                aria-busy={sending}
+                onClick={submit}
+              >
+                Send
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {value.length >= CHAR_COUNT_THRESHOLD && (
