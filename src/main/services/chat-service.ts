@@ -123,10 +123,10 @@ import {
 } from './budget'
 import { runResearchPipeline, type ResearchDeps, type ResearchOutcome } from './research'
 import { StreamDeltaBuffer } from './stream-delta-buffer'
+import { buildSessionTitle, isOldStyleTitle } from './session-title'
 import { buildQuickPrompt } from '@shared/quick-actions'
 
 const DEFAULT_TITLE = 'New chat'
-const TITLE_MAX_CHARS = 60
 
 /** The exact dialog answer that lets a send continue past a budget cap. */
 export const BUDGET_CONTINUE_OPTION = 'Continue this time'
@@ -2649,7 +2649,7 @@ export class ChatService {
    * on the broadcast bus so the main window can navigate to it.
    */
   promoteQuick(input: QuickPromoteRequest): Conversation {
-    const fallbackTitle = input.userText.replace(/\s+/g, ' ').trim().slice(0, TITLE_MAX_CHARS)
+    const fallbackTitle = buildSessionTitle(input.userText)
     const conversation = this.db.conversations.create({
       mode: 'chat',
       title: input.title?.trim() || fallbackTitle || 'Quick assistant',
@@ -4357,13 +4357,35 @@ export class ChatService {
         .listByConversation(conversationId)
         .find((m) => m.role === 'user' && m.content.trim().length > 0)
       if (!firstUser) return
-      const firstLine = firstUser.content.trim().split('\n')[0].trim()
-      const title = firstLine.slice(0, TITLE_MAX_CHARS)
+      const title = buildSessionTitle(firstUser.content)
       if (title.length === 0) return
       this.db.conversations.update(conversationId, { title })
       this.broadcast(CHANNELS.conversationsChanged, { conversationId })
     } catch {
       // Titling is cosmetic — never let it break stream completion.
+    }
+  }
+
+  /**
+   * One-shot boot pass: replace titles written by the old raw-first-line rule
+   * with condensed labels. Manual renames and any other title stay put.
+   */
+  backfillSessionTitles(): void {
+    try {
+      if (this.db.settings.get().sessionTitlesBackfilled) return
+      for (const row of this.db.conversations.listForTitleBackfill()) {
+        if (!row.firstUserContent) continue
+        if (row.title !== DEFAULT_TITLE && !isOldStyleTitle(row.title, row.firstUserContent)) {
+          continue
+        }
+        const title = buildSessionTitle(row.firstUserContent)
+        if (title.length > 0 && title !== row.title) {
+          this.db.conversations.setTitle(row.id, title)
+        }
+      }
+      this.db.settings.update({ sessionTitlesBackfilled: true })
+    } catch {
+      // Cosmetic; a failed pass retries on the next launch.
     }
   }
 }

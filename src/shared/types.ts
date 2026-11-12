@@ -1227,6 +1227,12 @@ export interface AppSettings {
    * call still asks unless a rule says otherwise.
    */
   desktopControlEnabled: boolean
+  /**
+   * Internal one-shot marker: titles written by the old raw-first-line rule
+   * have been rewritten to condensed labels. Main-owned; absent from
+   * settingsPatchSchema so the renderer and backups cannot set it.
+   */
+  sessionTitlesBackfilled: boolean
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -1301,6 +1307,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   autoReview: 'autonomous',
   anomalyMonitorEnabled: true,
   desktopControlEnabled: false,
+  sessionTitlesBackfilled: false,
 }
 
 /**
