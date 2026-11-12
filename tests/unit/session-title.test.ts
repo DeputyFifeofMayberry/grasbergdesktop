@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { buildSessionTitle, isOldStyleTitle } from '../../src/main/services/session-title'
+import {
+  buildSessionTitle,
+  isLikelyAutoTitle,
+  isOldStyleTitle,
+} from '../../src/main/services/session-title'
 
 describe('buildSessionTitle', () => {
   const cases: Array<[string, string]> = [
@@ -77,5 +81,27 @@ describe('isOldStyleTitle', () => {
     expect(isOldStyleTitle('x'.repeat(59), 'x'.repeat(80))).toBe(false)
     expect(isOldStyleTitle('New chat', 'fix the sidebar')).toBe(false)
     expect(isOldStyleTitle('New chat', '')).toBe(false)
+  })
+})
+
+describe('isLikelyAutoTitle', () => {
+  it('matches a title copied from the prompt by an earlier pass', () => {
+    expect(
+      isLikelyAutoTitle(
+        'Remove the inbox plugin thing from opencode i dont want it',
+        'remove the inbox plugin thing from opencode i dont want it anymore'
+      )
+    ).toBe(true)
+    expect(
+      isLikelyAutoTitle(
+        'Fix the sidebar flicker',
+        'please fix the sidebar flicker when I switch chats'
+      )
+    ).toBe(true)
+  })
+
+  it('leaves manual titles and short titles alone', () => {
+    expect(isLikelyAutoTitle('My custom sidebar name', 'fix the sidebar flicker')).toBe(false)
+    expect(isLikelyAutoTitle('Fix login', 'fix login')).toBe(false)
   })
 })

@@ -278,3 +278,29 @@ export function isOldStyleTitle(storedTitle: string, firstUserContent: string): 
   const firstLine = content.split('\n')[0].trim()
   return storedTitle === firstLine.slice(0, TITLE_MAX_CHARS)
 }
+
+function titleWords(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter((word) => word.length > 0)
+}
+
+/**
+ * True when `storedTitle` is a run of words copied from the start of the
+ * prompt, which is what an earlier auto-title rule produced. Used on a rules
+ * upgrade so chats titled by the previous pass can be found without touching
+ * manual renames.
+ */
+export function isLikelyAutoTitle(storedTitle: string, firstUserContent: string): boolean {
+  const title = titleWords(storedTitle)
+  const content = titleWords(firstUserContent)
+  if (title.length < 4 || title.length > content.length) return false
+  const lastStart = Math.min(6, content.length - title.length)
+  for (let start = 0; start <= lastStart; start++) {
+    if (title.every((word, i) => word === content[start + i])) return true
+  }
+  return false
+}

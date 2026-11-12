@@ -123,12 +123,12 @@ import {
 } from './budget'
 import { runResearchPipeline, type ResearchDeps, type ResearchOutcome } from './research'
 import { StreamDeltaBuffer } from './stream-delta-buffer'
-import { buildSessionTitle, isOldStyleTitle } from './session-title'
+import { buildSessionTitle, isLikelyAutoTitle, isOldStyleTitle } from './session-title'
 import { buildQuickPrompt } from '@shared/quick-actions'
 
 const DEFAULT_TITLE = 'New chat'
 /** Bump when buildSessionTitle changes so the boot backfill re-titles chats. */
-const TITLE_RULES_VERSION = 1
+const TITLE_RULES_VERSION = 2
 
 /** The exact dialog answer that lets a send continue past a budget cap. */
 export const BUDGET_CONTINUE_OPTION = 'Continue this time'
@@ -4369,7 +4369,7 @@ export class ChatService {
   }
 
   /**
-   * Versioned boot pass: replace titles written by the old raw-first-line rule
+   * Versioned boot pass: replace titles written by an earlier auto-title rule
    * with condensed labels. Manual renames and any other title stay put.
    */
   backfillSessionTitles(): void {
@@ -4377,9 +4377,11 @@ export class ChatService {
       if (this.db.settings.get().sessionTitleVersion >= TITLE_RULES_VERSION) return
       for (const row of this.db.conversations.listForTitleBackfill()) {
         if (!row.firstUserContent) continue
-        if (row.title !== DEFAULT_TITLE && !isOldStyleTitle(row.title, row.firstUserContent)) {
-          continue
-        }
+        const autoTitled =
+          row.title === DEFAULT_TITLE ||
+          isOldStyleTitle(row.title, row.firstUserContent) ||
+          isLikelyAutoTitle(row.title, row.firstUserContent)
+        if (!autoTitled) continue
         const title = buildSessionTitle(row.firstUserContent)
         if (title.length > 0 && title !== row.title) {
           this.db.conversations.setTitle(row.id, title)
