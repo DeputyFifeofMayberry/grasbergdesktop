@@ -96,7 +96,7 @@ export default function InboxCard(): ReactElement | null {
         </div>
       ) : shown.length === 0 ? (
         <div className="home-empty">
-          <p>All caught up — background results land here for review.</p>
+          <p>All caught up. Background results land here for review.</p>
         </div>
       ) : (
         <ul className="home-list">

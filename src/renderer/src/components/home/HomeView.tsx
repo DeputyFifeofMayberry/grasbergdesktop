@@ -1,8 +1,10 @@
 /**
- * Home overview — the app's landing surface: scheduled workflows with live
- * status (top-left, the headline card), recent runs, recent work across every
- * mode, projects, and quick actions. Every card links deeper into the surface
- * it summarizes.
+ * Home overview — the app's landing surface, laid out as a workspace briefing:
+ * a branded header, a full-width start band, a two-column activity row
+ * (Scheduled + Recent work), and a three-column utility row (Notes + Recent
+ * runs + Projects). Conditional cards (Needs you, Brief, Getting started,
+ * Inbox) stack above the rows. Every card links deeper into the surface it
+ * summarizes.
  */
 
 import { useEffect, useMemo, useState } from 'react'
@@ -66,7 +68,7 @@ export default function HomeView(): React.JSX.Element {
 
   return (
     <div className="home">
-      {loadError && <div className="callout" role="alert">Could not refresh the overview: {loadError} <button className="btn" onClick={() => setReload(n => n + 1)}>Retry</button></div>}
+      {loadError && <div className="callout home-callout" role="alert">Could not refresh the overview: {loadError} <button className="btn" onClick={() => setReload(n => n + 1)}>Retry</button></div>}
       <header className="home-header">
         <img src={appIcon} width={40} height={40} alt="" aria-hidden="true" draggable={false} />
         <div className="home-header-text">
@@ -80,17 +82,21 @@ export default function HomeView(): React.JSX.Element {
           <span className="kbd">K</span> commands
         </span>
       </header>
-      <div className="home-grid">
+      <div className="home-content">
         <NeedsYouCard />
-        <QuickActionsCard />
         <BriefCard />
+        <QuickActionsCard />
         <GettingStartedCard recent={recent} />
-        <ScheduledCard />
         <InboxCard />
-        <NotesCard />
-        <RecentRunsCard />
-        <RecentWorkCard items={recent} projectNameById={projectNameById} />
-        <ProjectsCard projects={projects} />
+        <div className="home-split">
+          <ScheduledCard />
+          <RecentWorkCard items={recent} projectNameById={projectNameById} />
+        </div>
+        <div className="home-trio">
+          <NotesCard />
+          <RecentRunsCard />
+          <ProjectsCard projects={projects} />
+        </div>
       </div>
     </div>
   )

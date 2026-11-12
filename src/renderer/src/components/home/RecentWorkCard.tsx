@@ -6,7 +6,6 @@
 
 import type { ConversationMode, ConversationSummary } from '@shared/types'
 import { relativeTime } from '@/lib/format'
-import { newConversation } from '@/lib/new-conversation'
 import { useConversationsStore } from '@/stores/conversations'
 
 const MODE_LABELS: Record<ConversationMode, string> = {
@@ -41,9 +40,6 @@ export default function RecentWorkCard({
       ) : items.length === 0 ? (
         <div className="home-empty">
           <p>No conversations yet.</p>
-          <button type="button" className="btn btn-primary" onClick={() => newConversation('chat')}>
-            Start a new chat
-          </button>
         </div>
       ) : (
         <ul className="home-list">

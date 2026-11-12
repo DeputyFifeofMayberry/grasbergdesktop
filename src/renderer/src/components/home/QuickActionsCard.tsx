@@ -1,5 +1,6 @@
 /**
- * One-click entry points: a new task in any mode, or a new workflow.
+ * Full-width start band: one-click entry points into a chat, a work task, or
+ * a workflow.
  */
 
 import type { ConversationMode } from '@shared/types'
@@ -13,16 +14,17 @@ const ACTIONS: ReadonlyArray<{ mode: ConversationMode; label: string }> = [
 
 export default function QuickActionsCard(): React.JSX.Element {
   return (
-    <section className="card home-card" aria-label="Quick actions">
-      <div className="home-card-head">
-        <h2 className="home-card-title">Start something</h2>
+    <section className="card home-start" aria-label="Quick actions">
+      <div className="home-start-copy">
+        <h2 className="home-start-title">Start something</h2>
+        <p className="home-start-subtitle">A chat, a work task, or an automation.</p>
       </div>
       <div className="home-actions">
         {ACTIONS.map((a) => (
           <button
             type="button"
             key={a.mode}
-            className="btn"
+            className={a.mode === 'chat' ? 'btn btn-primary' : 'btn'}
             onClick={() => newConversation(a.mode)}
           >
             {a.label}
