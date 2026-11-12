@@ -128,7 +128,7 @@ import { buildQuickPrompt } from '@shared/quick-actions'
 
 const DEFAULT_TITLE = 'New chat'
 /** Bump when buildSessionTitle changes so the boot backfill re-titles chats. */
-const TITLE_RULES_VERSION = 3
+const TITLE_RULES_VERSION = 4
 
 /** The exact dialog answer that lets a send continue past a budget cap. */
 export const BUDGET_CONTINUE_OPTION = 'Continue this time'

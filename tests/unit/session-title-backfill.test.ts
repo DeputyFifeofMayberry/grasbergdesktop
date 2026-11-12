@@ -67,7 +67,7 @@ describe('ChatService.backfillSessionTitles', () => {
     expect(db.conversations.getById(placeholder)?.title).toBe('Add CSV export to the reports page')
     expect(db.conversations.getById(manual)?.title).toBe('My custom name')
     expect(db.conversations.getById(empty)?.title).toBe('New chat')
-    expect(db.settings.get().sessionTitleVersion).toBe(3)
+    expect(db.settings.get().sessionTitleVersion).toBe(4)
   })
 
   it('re-titles chats from the earlier title pass', () => {
@@ -81,7 +81,7 @@ describe('ChatService.backfillSessionTitles', () => {
     service.backfillSessionTitles()
 
     expect(db.conversations.getById(early)?.title).toBe('Remove the inbox plugin from OpenCode')
-    expect(db.settings.get().sessionTitleVersion).toBe(3)
+    expect(db.settings.get().sessionTitleVersion).toBe(4)
   })
 
   it('runs only once', () => {

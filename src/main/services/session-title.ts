@@ -124,6 +124,20 @@ const CONTRACTION_TAIL_RE = /\s+(?:i|we)'(?:m|ve|d|ll)\b/i
 const RATIONALE_TAIL_RE =
   /\s+(?:because|since|as (?:i|we)|which (?:i|we))\b/i
 
+/** "Is there a workflow that..." and friends, which hide an ask. */
+const ASK_NOUN_RE =
+  /\b(?:is|are)\s+there\s+(?:a|an|any)?\s*(way|workflow|tool|option|method|plugin|approach|library)\b/i
+const HOW_RE = /\bhow\s+(?:do|can|should|would|could)\s+(?:i|we)\s+([^?]+)\?/i
+/** A complaint that the current way is slow, which makes "faster" the ask. */
+const SLOW_RE =
+  /\btakes?\s+(?:a\s+)?(?:really|very|so|quite)?\s*(?:long time|forever|ages)\b|\btoo slow\b|\bslow(?:er)?\b|\btime[- ]consuming\b/i
+/** Products worth naming in an ask title, shortest form first. */
+const TOPIC_NAMES = [
+  'gsd', 'opencode', 'github', 'gitlab', 'deepseek', 'openai', 'anthropic',
+  'gemini', 'bedrock', 'electron', 'react', 'node', 'typescript', 'javascript',
+  'sqlite', 'windows', 'linux', 'macos',
+]
+
 /** Words that make a good place to shorten a long title. */
 const CAP_BOUNDARY_WORDS = new Set([
   'of', 'for', 'from', 'with', 'in', 'on', 'to', 'by', 'at', 'about', 'into',
@@ -193,6 +207,29 @@ function findVerb(text: string): { index: number } | null {
 function firstSentence(text: string): string {
   const end = text.search(/[.!?;](?=\s|$)/)
   return end === -1 ? text : text.slice(0, end)
+}
+
+/**
+ * Title for a prompt whose ask is a question rather than an opening verb:
+ * "is there a workflow..." -> "Find a workflow", with "faster" from a slow
+ * complaint and the product name when one is mentioned.
+ */
+function findAsk(text: string): string {
+  const how = HOW_RE.exec(text)
+  if (how) return how[1].trim()
+  const ask = ASK_NOUN_RE.exec(text)
+  if (!ask) return ''
+  const noun = ask[1].toLowerCase()
+  const tail = text.slice(ask.index)
+  const faster = SLOW_RE.test(text) ? 'faster ' : ''
+  const forClause = /\bfor\s+([^?]+?)(?:\?|$)/i.exec(tail)
+  if (forClause) return `Find a ${faster}${noun} for ${forClause[1].trim()}`
+  if (noun === 'way') {
+    const to = /\bto\s+([^?]+?)(?:\?|$)/i.exec(tail)
+    return to ? `Find a way to ${to[1].trim()}` : ''
+  }
+  const topic = TOPIC_NAMES.find((name) => new RegExp(`\\b${name}\\b`, 'i').test(text))
+  return `Find a ${faster}${topic ? (NAMES[topic] ?? topic) : ''} ${noun}`
 }
 
 /** Cut the earliest casual tail: a first-person aside or a stated reason. */
@@ -279,7 +316,8 @@ export function buildSessionTitle(text: string): string {
   const cleaned = cleanPrompt(text)
   if (cleaned.length === 0) return ''
   const stripped = stripFraming(cleaned)
-  const candidate = labelFrom(stripped) || finish(firstSentence(stripped))
+  const candidate =
+    labelFrom(stripped) || finish(findAsk(stripped)) || finish(firstSentence(stripped))
   return cap(sentenceCase(cap(candidate)))
 }
 

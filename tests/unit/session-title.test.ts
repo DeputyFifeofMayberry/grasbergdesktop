@@ -42,6 +42,15 @@ describe('buildSessionTitle', () => {
       'i really like the planning and spec phases of the gsd core method. is there a way',
       'Planning and spec phases of the GSD Core method',
     ],
+    [
+      'i really like the planning and spec phases of the gsd core method. however, the implementation takes a really long time. is there a workflow that does this best without dissecting gsd? trying to research all options.',
+      'Find a faster GSD workflow',
+    ],
+    ['is there a tool for parsing PDFs?', 'Find a tool for parsing PDFs'],
+    [
+      'is there a workflow for reviewing pull requests?',
+      'Find a workflow for reviewing pull requests',
+    ],
     ['fix the sidebar thing', 'Fix the sidebar'],
     ['add a retry because the relay drops frames', 'Add a retry'],
     ['fix the API url in settings', 'Fix the API URL in settings'],
