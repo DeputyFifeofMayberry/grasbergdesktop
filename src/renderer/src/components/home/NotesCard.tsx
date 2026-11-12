@@ -52,10 +52,7 @@ export default function NotesCard(): ReactElement {
         </div>
       ) : documents.length === 0 ? (
         <div className="home-empty">
-          <p>
-            No notes yet. Notes are living Markdown documents you and the assistant both edit —
-            the assistant reaches them with its document tools.
-          </p>
+          <p>Notes you and the assistant edit together.</p>
           <button type="button" className="btn btn-primary" onClick={() => void createNote()}>
             New note
           </button>

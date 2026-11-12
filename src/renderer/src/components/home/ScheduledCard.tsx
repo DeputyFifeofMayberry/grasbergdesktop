@@ -59,10 +59,7 @@ export default function ScheduledCard(): React.JSX.Element {
         </div>
       ) : scheduled.length === 0 ? (
         <div className="home-empty">
-          <p>
-            Nothing scheduled yet. Give a workflow a schedule and it shows up here with its next
-            run and result.
-          </p>
+          <p>No scheduled workflows yet. Add a schedule to see the next run here.</p>
           <button
             type="button"
             className="btn btn-primary"

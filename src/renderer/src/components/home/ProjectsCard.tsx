@@ -37,7 +37,7 @@ export default function ProjectsCard({
         </div>
       ) : projects.length === 0 ? (
         <div className="home-empty">
-          <p>No projects yet — create one with the + next to “Projects &amp; tasks”.</p>
+          <p>No projects yet. Create one from the sidebar.</p>
         </div>
       ) : (
         <>

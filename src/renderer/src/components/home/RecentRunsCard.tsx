@@ -26,7 +26,7 @@ export default function RecentRunsCard(): React.JSX.Element {
         </div>
       ) : recentRuns.length === 0 ? (
         <div className="home-empty">
-          <p>Runs will appear here once a workflow executes.</p>
+          <p>Workflow runs will appear here once one executes.</p>
         </div>
       ) : (
         <ul className="home-list">
