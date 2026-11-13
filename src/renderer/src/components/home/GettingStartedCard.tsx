@@ -177,7 +177,7 @@ export default function GettingStartedCard({
     {
       id: 'local-models',
       title: 'Free local models',
-      body: 'Run Ollama or LM Studio and Grasberg auto-detects it — chat without an API key, with nothing leaving your machine.',
+      body: 'Run Ollama or LM Studio and Warhawks auto-detects it — chat without an API key, with nothing leaving your machine.',
       applicable: true,
       actionLabel: 'Open settings',
       run: () => useUiStore.getState().openSettings(true),

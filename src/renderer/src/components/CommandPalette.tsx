@@ -156,7 +156,7 @@ export default function CommandPalette() {
       {
         id: 'act-discover',
         section: 'Actions',
-        label: 'What can Grasberg do?',
+        label: 'What can Warhawks do?',
         hint: 'Re-show the Getting started checklist and feature tips on Home',
         run: () => {
           close()

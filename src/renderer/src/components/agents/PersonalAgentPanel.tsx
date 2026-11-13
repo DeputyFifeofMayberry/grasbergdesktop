@@ -400,7 +400,7 @@ export function ComputerView({ agentId, label }: { agentId: string | null; label
         ) : (
           <>
             <p className="bot-form-hint">
-              Show it once: the agent's browser opens for you, Grasberg records your clicks and
+              Show it once: the agent's browser opens for you, Warhawks records your clicks and
               typing, and turns them into a reusable skill.
             </p>
             <div className="pa-row">

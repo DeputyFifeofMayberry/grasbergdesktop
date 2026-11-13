@@ -23,7 +23,7 @@ export default function LockScreen(): React.JSX.Element {
   }
 
   return (
-    <div className="lock-screen" role="dialog" aria-label="Grasberg is locked">
+    <div className="lock-screen" role="dialog" aria-label="Warhawks is locked">
       <form
         className="lock-card"
         onSubmit={(e) => {
@@ -31,7 +31,7 @@ export default function LockScreen(): React.JSX.Element {
           void submit()
         }}
       >
-        <h2 className="lock-title">Grasberg is locked</h2>
+        <h2 className="lock-title">Warhawks is locked</h2>
         <p className="lock-hint">Enter your passphrase to continue.</p>
         <input
           type="password"

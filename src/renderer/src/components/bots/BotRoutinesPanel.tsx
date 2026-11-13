@@ -145,7 +145,7 @@ export default function BotRoutinesPanel({ agent }: { agent: AgentProfile }): Re
                           <span className={`run-dot ${run.status}`} aria-hidden="true" />
                           <span className="sched-history-time">{dateTime(run.startedAt, 'compact')}</span>
                           {run.catchUp ? (
-                            <span className="sched-history-late" title="Grasberg was closed when this was due — it ran once at the next start.">
+                            <span className="sched-history-late" title="Warhawks was closed when this was due — it ran once at the next start.">
                               ran late
                             </span>
                           ) : null}
@@ -164,8 +164,8 @@ export default function BotRoutinesPanel({ agent }: { agent: AgentProfile }): Re
       )}
       <p className="bot-form-hint bot-routines-status">
         {alwaysOn
-          ? 'Grasberg keeps running when the window is closed, so routines run on schedule.'
-          : 'Routines run only while Grasberg is open; a slot missed while it was closed runs once at the next start. Turn on "Keep running in the background" in Settings → Appearance to change that.'}
+          ? 'Warhawks keeps running when the window is closed, so routines run on schedule.'
+          : 'Routines run only while Warhawks is open; a slot missed while it was closed runs once at the next start. Turn on "Keep running in the background" in Settings → Appearance to change that.'}
       </p>
     </div>
   )

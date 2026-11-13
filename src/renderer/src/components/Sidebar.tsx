@@ -17,7 +17,8 @@ import { useConversationsStore } from '@/stores/conversations'
 import { useProjectsStore } from '@/stores/projects'
 import { useSpacesStore } from '@/stores/spaces'
 import { toastError, useUiStore } from '@/stores/ui'
-import appIcon from '@/assets/icon.png'
+import ulmSeal from '@/assets/ulm-seal.png'
+import ModeIcon from './ModeIcon'
 
 /** Collapse key for the catch-all standalone Tasks group. */
 const NO_PROJECT_KEY = '__no_project__'
@@ -41,21 +42,6 @@ const NEW_LABELS: Record<MainSection, string> = {
 
 // The roster list is only needed on the Bots tab — keep it out of the boot chunk.
 const BotRosterList = lazy(() => import('@/components/bots/BotRosterList'))
-
-/** The real app icon (same asset as the packaged exe/dock icon). */
-function Logo({ size = 22 }: { size?: number }): React.JSX.Element {
-  return (
-    <img
-      src={appIcon}
-      width={size}
-      height={size}
-      alt=""
-      aria-hidden="true"
-      draggable={false}
-      style={{ display: 'block' }}
-    />
-  )
-}
 
 const PlusIcon = (
   <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
@@ -482,6 +468,15 @@ function TaskGroup({
 }
 
 export default function Sidebar(): React.JSX.Element {
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('uld.sidebar.collapsed') === '1')
+  const searchRef = useRef<HTMLInputElement>(null)
+  const collapseRef = useRef<HTMLButtonElement>(null)
+  const expandRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    document.documentElement.dataset.sidebar = collapsed ? 'collapsed' : 'expanded'
+    localStorage.setItem('uld.sidebar.collapsed', collapsed ? '1' : '0')
+  }, [collapsed])
+
   const summaries = useConversationsStore((s) => s.summaries)
   const activeId = useConversationsStore((s) => s.activeId)
   const modeFilter = useConversationsStore((s) => s.modeFilter)
@@ -567,32 +562,24 @@ export default function Sidebar(): React.JSX.Element {
   return (
     <nav className={`sidebar sidebar-mode-${section}`} aria-label={inBots ? 'Bots' : 'Conversations'}>
       <div className="sidebar-brand">
-        <Logo />
-        <span className="sidebar-wordmark">Grasberg</span>
         <button
           type="button"
-          className={`btn-icon sidebar-home-btn${view === 'home' ? ' active' : ''}`}
+          className="sidebar-seal-button"
           aria-label="Home overview"
           aria-current={view === 'home' ? 'page' : undefined}
           title="Home"
           onClick={() => useUiStore.getState().setView('home')}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M3 10.5 12 3l9 7.5" />
-            <path d="M5 9.5V21h5v-6h4v6h5V9.5" />
-          </svg>
+          <span className="sidebar-seal-tile"><img src={ulmSeal} alt="" aria-hidden="true" draggable={false} /></span>
         </button>
-        <button className="btn-icon sidebar-clock-btn" aria-label="Automation" title="Automation — scheduled tasks, bot routines and workflows" onClick={() => useUiStore.getState().setView('automation')}>◷</button>
+        <button ref={expandRef} type="button" className="btn-icon sidebar-brand-expand" aria-label="Expand sidebar" title="Expand sidebar" onClick={() => { setCollapsed(false); requestAnimationFrame(() => collapseRef.current?.focus()) }}>{ChevronIcon}</button>
+        <span className="sidebar-wordmark">Warhawks</span>
+        <div className="sidebar-brand-actions">
+          <button type="button" className="btn-icon sidebar-clock-btn" aria-label="Automation" title="Automation" onClick={() => useUiStore.getState().setView('automation')}>◷</button>
+          <button ref={collapseRef} type="button" className="btn-icon sidebar-collapse" aria-label="Collapse sidebar" title="Collapse sidebar" onClick={() => { setCollapsed(true); requestAnimationFrame(() => expandRef.current?.focus()) }}>
+            <span style={{ transform: 'rotate(180deg)', display: 'flex' }}>{ChevronIcon}</span>
+          </button>
+        </div>
       </div>
 
       <div className="sidebar-controls">
@@ -622,6 +609,7 @@ export default function Sidebar(): React.JSX.Element {
         ) : null}
         {inBots ? (
           <input
+            ref={searchRef}
             type="search"
             className="input sidebar-search"
             placeholder="Search bots…"
@@ -631,6 +619,7 @@ export default function Sidebar(): React.JSX.Element {
           />
         ) : (
           <input
+            ref={searchRef}
             type="search"
             className="input sidebar-search"
             placeholder="Search conversations…"
@@ -655,7 +644,7 @@ export default function Sidebar(): React.JSX.Element {
                   role="tab"
                   aria-selected={active}
                   aria-label={
-                    attentionCount > 0 ? `${tab.label} — ${attentionCount} need attention` : undefined
+                    attentionCount > 0 ? `${tab.label} — ${attentionCount} need attention` : tab.label
                   }
                   title={
                     attention && attention.needsYou > 0
@@ -664,12 +653,13 @@ export default function Sidebar(): React.JSX.Element {
                         ? `Bots · ${attention.unread} unread`
                         : attention && attention.working > 0
                           ? `Bots · ${attention.working} working`
-                          : undefined
+                          : tab.label
                   }
                   className="mode-tab"
                   onClick={() => (tab.key === 'bots' ? showBots() : showMode(tab.key))}
                 >
-                  {tab.label}
+                  <ModeIcon mode={tab.key} />
+                  <span className="mode-tab-label">{tab.label}</span>
                   {attentionCount > 0 ? (
                     <span
                       className={`mode-tab-badge${attention && attention.needsYou > 0 ? ' is-needs-you' : ''}`}
@@ -700,34 +690,38 @@ export default function Sidebar(): React.JSX.Element {
           <div className="mode-quick-actions" aria-label="Bots actions">
             <button
               type="button"
-              className="mode-quick-action"
-              onClick={() => openBotsPanel({ kind: 'new-bot' })}
-            >
-              {PlusIcon}
-              New bot
-            </button>
-            <button
-              type="button"
-              className="mode-quick-action"
+              className="mode-quick-action secondary"
               onClick={() => openBotsPanel({ kind: 'new-group' })}
             >
               {PlusIcon}
-              New group
+              <span className="mode-quick-action-label">New group</span>
+            </button>
+            <button
+              type="button"
+              className="mode-quick-action primary"
+              aria-label={NEW_LABELS.bots}
+              title={NEW_LABELS.bots}
+              onClick={() => openBotsPanel({ kind: 'new-bot' })}
+            >
+              {PlusIcon}
+              <span className="mode-quick-action-label">{NEW_LABELS.bots}</span>
             </button>
           </div>
         ) : (
           <div className="mode-quick-actions" aria-label={`${modeFilter} actions`}>
-            <button type="button" className="mode-quick-action" onClick={startProject}>
+            <button type="button" className="mode-quick-action secondary" onClick={startProject}>
               {PlusIcon}
-              New project
+              <span className="mode-quick-action-label">New project</span>
             </button>
             <button
               type="button"
-              className="mode-quick-action"
+              className="mode-quick-action primary"
+              aria-label={NEW_LABELS[modeFilter]}
+              title={NEW_LABELS[modeFilter]}
               onClick={() => startConversation(modeFilter)}
             >
               {PlusIcon}
-              New Task
+              <span className="mode-quick-action-label">{NEW_LABELS[modeFilter]}</span>
             </button>
           </div>
         )}
@@ -789,12 +783,16 @@ export default function Sidebar(): React.JSX.Element {
         {loaded && summaries.length === 0 && searching ? (
           <li className="conv-empty">No conversations match “{query.trim()}”.</li>
         ) : loaded && summaries.length === 0 && projects.length === 0 && !creatingProject ? (
-          <li className="conv-empty">No conversations yet. Start one with “New task”.</li>
+          <li className="conv-empty">No conversations yet. Start one with “{NEW_LABELS[section]}”.</li>
         ) : null}
       </ul>
       )}
 
       <div className="sidebar-footer">
+        <button type="button" className="btn-icon sidebar-collapse sidebar-expand-rail" aria-label="Expand sidebar" title="Expand sidebar" onClick={() => { setCollapsed(false); requestAnimationFrame(() => collapseRef.current?.focus()) }}>{ChevronIcon}</button>
+        <button type="button" className="btn-icon sidebar-search-rail" aria-label={inBots ? 'Search bots' : 'Search conversations'} title={inBots ? 'Search bots' : 'Search conversations'} onClick={() => { setCollapsed(false); requestAnimationFrame(() => searchRef.current?.focus()) }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5" /></svg>
+        </button>
         <button
           type="button"
           className="btn-icon"

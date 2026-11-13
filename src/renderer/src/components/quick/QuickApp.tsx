@@ -104,7 +104,7 @@ export default function QuickApp(): React.JSX.Element {
   }, [])
 
   // Follow the app theme (the quick window renders the same theme tokens).
-  const theme = settings?.theme ?? 'system'
+  const theme = settings?.theme ?? 'dark'
   useEffect(() => {
     const apply = (resolved: 'light' | 'dark'): void => {
       document.documentElement.dataset.theme = resolved
