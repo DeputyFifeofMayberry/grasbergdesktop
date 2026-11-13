@@ -438,7 +438,7 @@ export class ChannelHub {
             wrapUntrusted(inbound.text.slice(0, 20_000), `${platform} message from ${inbound.senderName}`)
         }
       }
-      if (agent.paused) return reply(`I am paused right now — my owner can resume me in Grasberg.`)
+      if (agent.paused) return reply(`I am paused right now — my owner can resume me in Warhawks.`)
     }
     await this.route(row, inbound.target, content, untrusted)
   }

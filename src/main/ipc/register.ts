@@ -2099,7 +2099,7 @@ export function registerIpc(deps: RegisterIpcDeps): IpcHandlerMap {
     const parsed = parseInput(backupExportOptionsSchema, req)
     const date = new Date().toISOString().slice(0, 10)
     return saveTextFile(
-      `grasberg-backup-${date}.json`,
+      `warhawks-backup-${date}.json`,
       [{ name: 'JSON', extensions: ['json'] }],
       JSON.stringify(
         buildBackup(db, { includePrivateSpaces: !currentInvocationPolicy() && parsed?.includePrivateSpaces === true }),
@@ -3104,8 +3104,8 @@ export function registerIpc(deps: RegisterIpcDeps): IpcHandlerMap {
       hooks: db.settings.get().projectHooks,
     }
     return saveTextFile(
-      'grasberg-agent-pack.json',
-      [{ name: 'Grasberg agent pack', extensions: ['json'] }],
+      'warhawks-agent-pack.json',
+      [{ name: 'Warhawks agent pack', extensions: ['json'] }],
       JSON.stringify(pack, null, 2)
     )
   })
@@ -3241,7 +3241,7 @@ export function registerIpc(deps: RegisterIpcDeps): IpcHandlerMap {
     ipcMain.handle(channel, async (_event, ...args: unknown[]) => {
       try {
         if (deps.appLock?.isLocked() && !LOCK_EXEMPT_CHANNELS.has(channel)) {
-          throw new ProviderError('auth', 'Grasberg is locked. Unlock to continue.', {
+          throw new ProviderError('auth', 'Warhawks is locked. Unlock to continue.', {
             retryable: false,
           })
         }

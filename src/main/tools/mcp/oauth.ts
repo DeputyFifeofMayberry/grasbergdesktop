@@ -92,7 +92,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
 
   get clientMetadata(): OAuthClientMetadata {
     return {
-      client_name: 'Grasberg',
+      client_name: 'Warhawks',
       redirect_uris: [OAUTH_REDIRECT_URL],
       grant_types: ['authorization_code', 'refresh_token'],
       response_types: ['code'],
@@ -197,7 +197,7 @@ export function awaitOAuthCallback(
       }
       const error = url.searchParams.get('error')
       if (error) {
-        page('Sign-in failed', 'You can close this tab and try again in Grasberg.')
+        page('Sign-in failed', 'You can close this tab and try again in Warhawks.')
         finish(new Error(`The service refused the sign-in (${error}).`))
         return
       }
@@ -207,7 +207,7 @@ export function awaitOAuthCallback(
         finish(new Error('No authorization code was returned.'))
         return
       }
-      page('Connected ✓', 'You can close this tab and return to Grasberg.')
+      page('Connected ✓', 'You can close this tab and return to Warhawks.')
       finish(null, value)
     })
     server.once('error', (e: NodeJS.ErrnoException) => {

@@ -260,7 +260,7 @@ export class BotChannelService {
         binding.pairingExpiresAt === null ||
         binding.pairingExpiresAt <= Date.now()
       if (expired || binding.pairingAttempts >= PAIRING_MAX_ATTEMPTS) {
-        return 'Pairing is not armed. Open Grasberg → Bots → this bot and generate a new pairing code.'
+        return 'Pairing is not armed. Open Warhawks → Bots → this bot and generate a new pairing code.'
       }
       if (inbound.text.trim() === binding.pairingCode) {
         db.botBindings.setPaired(agentId, inbound.chatId)
@@ -270,8 +270,8 @@ export class BotChannelService {
       }
       const attempts = db.botBindings.bumpPairingAttempts(agentId)
       return attempts >= PAIRING_MAX_ATTEMPTS
-        ? 'Too many wrong codes — pairing is locked. Generate a new code in Grasberg.'
-        : 'That is not the pairing code. Paste the six-digit code shown in Grasberg.'
+        ? 'Too many wrong codes — pairing is locked. Generate a new code in Warhawks.'
+        : 'That is not the pairing code. Paste the six-digit code shown in Warhawks.'
     }
     if (inbound.chatId !== binding.allowedChatId) {
       return 'This bot is private and only responds to its owner.'
@@ -353,7 +353,7 @@ export class BotChannelService {
   ): Promise<string | null> {
     // Paused (v53): answer honestly instead of queueing work nobody runs.
     if (this.deps.db.agents.getById(agentId)?.paused) {
-      return 'I am paused right now — my owner can resume me in Grasberg.'
+      return 'I am paused right now — my owner can resume me in Warhawks.'
     }
     const chat = this.deps.ensureBotChat(agentId)
     void this.bridges.get(agentId)?.bridge.sendTyping(chatId)

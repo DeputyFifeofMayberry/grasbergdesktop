@@ -304,7 +304,7 @@ export function buildEmail(input: {
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: base64',
-    'X-Mailer: Grasberg',
+    'X-Mailer: Warhawks',
   ]
   return `${headers.join('\r\n')}\r\n\r\n${body}`
 }

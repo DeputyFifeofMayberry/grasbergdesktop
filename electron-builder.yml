@@ -1,7 +1,7 @@
-# electron-builder configuration for Grasberg.
+# electron-builder configuration for Warhawks.
 # Signed Windows releases use electron-builder.signed.yml — see README "Building installers".
 appId: com.grasberg.app
-productName: Grasberg
+productName: Warhawks
 
 directories:
   output: release
@@ -35,7 +35,7 @@ win:
     - nsis
 
 # Dash-separated artifact names (no spaces) matching the website's download
-# URLs: Grasberg-Setup-1.0.0.exe, Grasberg-1.0.0.dmg, Grasberg-1.0.0.AppImage.
+# URLs: Warhawks-Setup-1.0.0.exe, Warhawks-1.0.0.dmg, Warhawks-1.0.0.AppImage.
 nsis:
   artifactName: ${productName}-Setup-${version}.${ext}
   oneClick: false
