@@ -1032,6 +1032,8 @@ function bootstrap(): void {
       )
     },
   })
+  // Versioned pass: condense titles that still echo the raw first prompt.
+  chatService.backfillSessionTitles()
 
   const imBridge = new ImBridgeManager({
     db: database,

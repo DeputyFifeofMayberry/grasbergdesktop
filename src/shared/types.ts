@@ -1227,6 +1227,13 @@ export interface AppSettings {
    * call still asks unless a rule says otherwise.
    */
   desktopControlEnabled: boolean
+  /**
+   * Internal marker: the title-condensing rules version applied by the
+   * backfill. Main-owned; absent from settingsPatchSchema so the renderer
+   * and backups cannot set it. Bump it when the rules change so existing
+   * chats are re-titled on the next launch.
+   */
+  sessionTitleVersion: number
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -1301,6 +1308,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   autoReview: 'autonomous',
   anomalyMonitorEnabled: true,
   desktopControlEnabled: false,
+  sessionTitleVersion: 0,
 }
 
 /**

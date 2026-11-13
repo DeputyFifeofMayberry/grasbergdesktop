@@ -17,6 +17,7 @@ import type {
 } from '@shared/types'
 import { CHANNELS } from '@shared/ipc'
 import { openDatabase, type AppDatabase } from '../../../src/main/db/database'
+import { buildSessionTitle } from '../../../src/main/services/session-title'
 import type {
   AdapterChatRequest,
   AdapterChatResult,
@@ -137,7 +138,7 @@ describe('ChatService.promoteQuick', () => {
     })
   })
 
-  it('derives the fallback title from whitespace-collapsed userText, capped at 60', () => {
+  it('condenses the fallback title from userText, capped at 60', () => {
     const providerId = seedProvider()
     const { service } = makeHarness()
 
@@ -148,7 +149,8 @@ describe('ChatService.promoteQuick', () => {
       providerId,
       modelId: 'quick-model',
     })
-    expect(conversation.title).toBe(longText.replace(/\s+/g, ' ').trim().slice(0, 60))
+    expect(conversation.title).toBe(buildSessionTitle(longText))
+    expect(conversation.title.startsWith('First line')).toBe(true)
     expect(conversation.title.length).toBeLessThanOrEqual(60)
     expect(conversation.title).not.toContain('\n')
   })

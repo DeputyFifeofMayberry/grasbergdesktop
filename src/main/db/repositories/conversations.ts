@@ -78,6 +78,13 @@ export interface ConversationsRepository {
   clearSummary(id: string): void
   /** Forks of a conversation (sibling lookup for the backlink chip), oldest first. */
   listForks(parentId: string): Array<{ id: string; title: string; createdAt: number }>
+  /**
+   * Title backfill: every conversation's stored title plus its first non-empty
+   * user message. One scan; used once at boot.
+   */
+  listForTitleBackfill(): Array<{ id: string; title: string; firstUserContent: string | null }>
+  /** Rewrite just the title, leaving updated_at (sidebar order) untouched. */
+  setTitle(id: string, title: string): void
   /** Ids of every conversation living in a private space (exclusion filters). */
   listPrivateSpaceConversationIds(): string[]
 }
@@ -361,6 +368,30 @@ export function createConversationsRepository(driver: SqliteDriver): Conversatio
         [parentId]
       )
       return rows.map((row) => ({ id: row.id, title: row.title, createdAt: row.created_at }))
+    },
+
+    listForTitleBackfill() {
+      const rows = driver.all<{
+        id: string
+        title: string
+        first_user_content: string | null
+      }>(
+        `SELECT c.id, c.title,
+           (SELECT m.content FROM messages m
+            WHERE m.conversation_id = c.id AND m.role = 'user'
+              AND TRIM(m.content, char(9) || char(10) || char(13) || ' ') <> ''
+            ORDER BY m.seq ASC LIMIT 1) AS first_user_content
+         FROM conversations c`
+      )
+      return rows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        firstUserContent: row.first_user_content,
+      }))
+    },
+
+    setTitle(id, title) {
+      driver.run('UPDATE conversations SET title = ? WHERE id = ?', [title, id])
     },
 
     listPrivateSpaceConversationIds() {
