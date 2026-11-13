@@ -264,7 +264,7 @@ function AppLockSection() {
           </span>
           <span className="field-hint">
             {configured
-              ? 'Grasberg locks on launch. Change or remove the passphrase below.'
+              ? 'Warhawks locks on launch. Change or remove the passphrase below.'
               : 'Set a passphrase to enable the lock.'}
           </span>
         </div>

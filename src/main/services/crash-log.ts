@@ -72,7 +72,7 @@ export function installCrashLogging(userDataPath: string): void {
     logMainError('unhandledRejection', reason)
   })
   // A plain marker (no stack) so a log always shows when the session began.
-  logMainError('session-start', 'Grasberg main process started.')
+  logMainError('session-start', 'Warhawks main process started.')
 }
 
 /** Log synchronously, then terminate: continuing after an unknown exception is unsafe. */

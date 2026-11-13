@@ -127,7 +127,9 @@ permissions, standing rules, activity log; workflows, scheduled tasks and
 their run history; agents (= bots), `bot_groups`, `bot_bindings`,
 `a2a_outbox`; memories, skills, documents, knowledge; optimizer +
 experiments; remote devices; inbox state; headless usage ledger. DB file
-lives in Electron `userData`.
+lives in Electron `userData`, pinned to the existing `Grasberg` folder under
+Electron's `appData` after the visible rename to Warhawks. New installs default
+to dark theme; saved theme choices remain unchanged.
 
 ## Implementation status
 

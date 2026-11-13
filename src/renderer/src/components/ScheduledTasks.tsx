@@ -478,7 +478,7 @@ export default function ScheduledTasks(): React.JSX.Element {
                               {run.catchUp ? (
                                 <span
                                   className="sched-history-late"
-                                  title="Grasberg was closed when this was due — it ran once at the next start, not once per missed slot."
+                                  title="Warhawks was closed when this was due — it ran once at the next start, not once per missed slot."
                                 >
                                   ran late
                                 </span>

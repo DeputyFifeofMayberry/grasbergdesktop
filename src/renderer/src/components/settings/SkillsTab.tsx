@@ -159,7 +159,7 @@ export default function SkillsTab(): ReactElement {
       {teaching ? (
         <div className="card pa-panel teach-card">
           <p className="field-hint">
-            Show a task once in the agent browser — Grasberg records it and writes a skill any
+            Show a task once in the agent browser — Warhawks records it and writes a skill any
             agent can repeat. (A bot's own browser and logins are on its profile.) You can also
             turn a finished conversation into a skill from the command palette.
           </p>

@@ -662,6 +662,12 @@
   margin-top: 16px;
 }
 
+.onboarding-seal {
+  background: white;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
 /* -------------------------------------------------------------- onboarding */
 
 .wizard {

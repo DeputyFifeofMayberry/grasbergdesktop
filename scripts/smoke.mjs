@@ -14,7 +14,7 @@ await access(main)
 // the user's conversations, paired devices, credentials or window state.
 const smokeDir = await mkdtemp(join(tmpdir(), 'grasberg-smoke-'))
 await writeFile(join(smokeDir, 'package.json'), JSON.stringify({ name: 'grasberg-smoke', version: '1.1.0', main: 'launch.cjs' }))
-await writeFile(join(smokeDir, 'launch.cjs'), `const { app } = require('electron'); app.setPath('userData', ${JSON.stringify(join(smokeDir, 'profile'))}); app.setName('Grasberg smoke'); require(${JSON.stringify(main)});`)
+await writeFile(join(smokeDir, 'launch.cjs'), `const { app } = require('electron'); app.setPath('appData', ${JSON.stringify(smokeDir)}); app.setPath('userData', ${JSON.stringify(join(smokeDir, 'profile'))}); app.setName('Grasberg smoke'); require(${JSON.stringify(main)});`)
 let sawOk = false
 
 const child = spawn(electron, [smokeDir], {

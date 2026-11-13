@@ -386,7 +386,7 @@ export class RemoteService {
       return
     }
     if (inner.t === 'hello') {
-      this.tunnel?.sendToDevice(deviceId, sealFrame(key, { t: 'hello-res', app: { name: 'Grasberg', version: this.deps.appVersion }, capabilities: remoteCapabilities(device.access ?? 'limited') }))
+      this.tunnel?.sendToDevice(deviceId, sealFrame(key, { t: 'hello-res', app: { name: 'Warhawks', version: this.deps.appVersion }, capabilities: remoteCapabilities(device.access ?? 'limited') }))
       return
     }
     if (inner.t === 'req') {

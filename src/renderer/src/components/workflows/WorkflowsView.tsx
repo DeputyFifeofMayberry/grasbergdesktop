@@ -873,7 +873,7 @@ export default function WorkflowsView(): ReactElement {
                 </>
               )}
               <p className="field-hint">
-                Save to apply. Add a Notify node to get the result. A run missed while Grasberg was
+                Save to apply. Add a Notify node to get the result. A run missed while Warhawks was
                 closed happens once at the next start — not once per slot it slept through.
               </p>
 
@@ -886,7 +886,7 @@ export default function WorkflowsView(): ReactElement {
                 />
                 <p className="field-hint">
                   Lets an outside event — a git hook, a CI job, a script — start this workflow by
-                  POSTing to Grasberg. Turn the endpoint itself on in Settings → Bridges; it listens
+                  POSTing to Warhawks. Turn the endpoint itself on in Settings → Bridges; it listens
                   on 127.0.0.1 only, needs its token, and starts only workflows switched on here.
                 </p>
                 {webhookEnabled && workflowId ? (

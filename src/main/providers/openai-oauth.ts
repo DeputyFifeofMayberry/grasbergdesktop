@@ -212,10 +212,10 @@ export class OpenAiOAuthManager {
         const finish = (ok: boolean, msg: string) => {
           res.writeHead(ok ? 200 : 400, { 'Content-Type': 'text/html; charset=utf-8' })
           res.end(
-            `<!doctype html><meta charset="utf-8"><title>Grasberg</title>` +
+            `<!doctype html><meta charset="utf-8"><title>Warhawks</title>` +
               `<body style="font-family:system-ui;background:#0f1115;color:#e6e6e6;display:grid;place-items:center;height:100vh;margin:0">` +
               `<div style="text-align:center"><h2>${ok ? 'Signed in ✓' : 'Sign-in failed'}</h2>` +
-              `<p>${msg}</p><p>You can close this tab and return to Grasberg.</p></div></body>`
+              `<p>${msg}</p><p>You can close this tab and return to Warhawks.</p></div></body>`
           )
         }
         if (err) {

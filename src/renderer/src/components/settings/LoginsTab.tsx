@@ -73,7 +73,7 @@ export default function LoginsTab(): ReactElement {
           <h3>Logins</h3>
           <p className="field-hint">
             Sites your agents may sign in to on your behalf. When an agent reaches a login page it
-            asks the app to fill it — the password is typed into the page by Grasberg and never
+            asks the app to fill it — the password is typed into the page by Warhawks and never
             shown to the model, logged or sent anywhere else. Payments and password changes still
             stay with you.
           </p>

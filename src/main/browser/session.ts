@@ -113,7 +113,7 @@ export class BrowserSession {
   /** Called whenever control changes hands (main pushes it to the renderer). */
   onControlChange: ((userControl: boolean) => void) | null = null
   /** Window title while the user drives (names the bot when known). */
-  label = 'Grasberg browser'
+  label = 'Warhawks browser'
   /** v53 teach-a-task: the demonstration being recorded, with its listeners. */
   private recording: { steps: TeachStep[]; detach: () => void } | null = null
 

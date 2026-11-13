@@ -4,7 +4,7 @@ import { buildExperimentSection, buildModeSystemPrompt } from '../../src/main/pr
 describe('buildModeSystemPrompt', () => {
   it('chat mode adds conversational tone guidance but no artifact formats', () => {
     const prompt = buildModeSystemPrompt('chat')
-    expect(prompt).toContain('Grasberg')
+    expect(prompt).toContain('Warhawks')
     expect(prompt).toContain('Chat mode')
     // Honesty-over-validation and formatting restraint (from tone guidance).
     expect(prompt).toContain('"You\'re absolutely right"')

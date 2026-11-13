@@ -66,7 +66,7 @@ export class DesktopControl {
   kill(): void {
     this.deps.disable()
     this.stopHost()
-    this.deps.notify('Desktop control stopped', 'Grasberg will not touch your mouse or keyboard until you turn it back on.')
+    this.deps.notify('Desktop control stopped', 'Warhawks will not touch your mouse or keyboard until you turn it back on.')
   }
 
   stopHost(): void {
@@ -171,7 +171,7 @@ export class DesktopControl {
       this.announced = true
       this.deps.registerKillShortcut(() => this.kill())
       this.deps.notify(
-        'Grasberg is controlling your desktop',
+        'Warhawks is controlling your desktop',
         'Press Ctrl+Alt+Esc at any time to stop it immediately.'
       )
     }

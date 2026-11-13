@@ -75,10 +75,16 @@ const remoteFixture = `
 `
 const qaBundle = join(root, 'out', 'main', 'qa-index.js')
 await build({ entryPoints: [join(root, 'src/main/index.ts')], outfile: qaBundle, bundle: true, platform: 'node', format: 'cjs', packages: 'external', alias: { '@shared': join(root, 'src/shared') }, plugins: [{ name: 'isolated-qa', setup(builder) {
-  builder.onLoad({ filter: /src[\\/]main[\\/]index\.ts$/ }, async ({ path }) => ({ contents: (await readFile(path, 'utf8')).replace('db = database', 'db = database;' + fixture).replace('remoteService = remote', 'remoteService = remote;' + remoteFixture).replace('  applyLoginItem()', '  // QA never changes login items'), loader: 'ts' }))
+  builder.onLoad({ filter: /src[\\/]main[\\/]index\.ts$/ }, async ({ path }) => {
+    const source = await readFile(path, 'utf8')
+    // shortcut: matches the current userData pin, update this hook if the pin changes.
+    const pin = "app.setPath('userData', path.join(app.getPath('appData'), 'Grasberg'))"
+    if (!source.includes(pin)) throw new Error('QA profile override could not locate the userData pin.')
+    return { contents: source.replace(pin, `app.setPath('userData', ${JSON.stringify(join(qa, 'profile'))})`).replace('db = database', 'db = database;' + fixture).replace('remoteService = remote', 'remoteService = remote;' + remoteFixture).replace('  applyLoginItem()', '  // QA never changes login items'), loader: 'ts' }
+  })
 } }] })
 await writeFile(join(qa, 'package.json'), JSON.stringify({ name: 'grasberg-isolated-qa', version: '1.1.0', productName: 'Grasberg QA', main: 'launch.cjs' }))
-await writeFile(join(qa, 'launch.cjs'), `const { app } = require('electron'); app.setPath('userData', ${JSON.stringify(join(qa, 'profile'))}); app.setName('Grasberg isolated QA'); require(${JSON.stringify(qaBundle)});`)
+await writeFile(join(qa, 'launch.cjs'), `const { app } = require('electron'); app.setPath('appData', ${JSON.stringify(qa)}); app.setPath('userData', ${JSON.stringify(join(qa, 'profile'))}); app.setName('Grasberg isolated QA'); require(${JSON.stringify(qaBundle)});`)
 const electron = spawn(join(root, 'node_modules/electron/dist/electron.exe'), [qa], { stdio: 'inherit', windowsHide: true })
 children.push(electron)
 console.log(`Isolated QA folder: ${qa}`)
