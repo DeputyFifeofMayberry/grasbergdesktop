@@ -455,7 +455,7 @@ export default function ChatView(): ReactElement {
             <div className="chat-empty">
               <div className="chat-empty-title">Start the conversation</div>
               <div className="chat-empty-hint">
-                Type a message below — or pick a starter to see what Grasberg can do.
+                Type a message below — or pick a starter to see what Warhawks can do.
               </div>
               <div className="chat-starters">
                 {STARTER_PROMPTS[conversation.mode].map((starter) => (

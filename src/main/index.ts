@@ -6,6 +6,7 @@
 
 import { mkdirSync, existsSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import * as path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   BrowserWindow,
@@ -91,6 +92,10 @@ import {
 import { AppLockService, windowPushAllowed } from './services/app-lock'
 import { collectInboxItems, countUnreviewed } from './services/inbox'
 import { installCrashLogging, logMainError } from './services/crash-log'
+
+app.setName('Warhawks')
+// Preserve the existing data folder after the visible rename.
+app.setPath('userData', path.join(app.getPath('appData'), 'Grasberg'))
 
 /** Wall-clock cap on one optimizer eval/test command execution. */
 const OPTIMIZER_EVAL_TIMEOUT_MS = 10 * 60_000
@@ -338,10 +343,10 @@ function installQuickAccess(): void {
     const iconPath = appIconPath()
     if (existsSync(iconPath)) {
       tray = new Tray(iconPath)
-      tray.setToolTip('Grasberg')
+      tray.setToolTip('Warhawks')
       tray.setContextMenu(
         Menu.buildFromTemplate([
-          { label: 'Open Grasberg', click: () => summonWindow() },
+          { label: 'Open Warhawks', click: () => summonWindow() },
           {
             label: 'Keep running when the window is closed',
             type: 'checkbox',
@@ -380,7 +385,8 @@ function createWindow(opts: { startHidden?: boolean } = {}): BrowserWindow {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    backgroundColor: '#0f1115',
+    backgroundColor: '#0c0a0b',
+    title: 'Warhawks',
     show: false,
     ...(existsSync(iconPath) ? { icon: iconPath } : {}),
     webPreferences: {
@@ -627,7 +633,7 @@ function bootstrap(): void {
   pool.setConfigure((scope, session) => {
     const agentId = scope.startsWith('bot:') ? scope.slice(4) : null
     const name = agentId ? database.agents.getById(agentId)?.name : null
-    session.label = name ? `${name}'s browser` : 'Grasberg browser'
+    session.label = name ? `${name}'s browser` : 'Warhawks browser'
     session.onControlChange = (userControl) =>
       broadcast(CHANNELS.browserControl, { agentId, userControl })
   })
@@ -1059,7 +1065,7 @@ function bootstrap(): void {
       // Dock/Unity badge where the platform has one; the tray tooltip carries
       // the count everywhere else (Windows has no dock badge).
       app.setBadgeCount(count)
-      tray?.setToolTip(count > 0 ? `Grasberg — ${count} to review` : 'Grasberg')
+      tray?.setToolTip(count > 0 ? `Warhawks — ${count} to review` : 'Warhawks')
     },
     flash: (on) => {
       if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isFocused()) {
@@ -1610,10 +1616,10 @@ function showStartupFailure(message: string): void {
     )
     const recovery = snapshot
       ? `\n\nA pre-migration snapshot of the database exists:\n${join(dataDir, snapshot)}\n` +
-        `With Grasberg closed, you can restore it by renaming that file over ${dbPath}.`
+        `With Warhawks closed, you can restore it by renaming that file over ${dbPath}.`
       : ''
     dialog.showErrorBox(
-      'Grasberg could not start',
+      'Warhawks could not start',
       `${message}\n\nDatabase: ${dbPath}${recovery}`
     )
   } catch {

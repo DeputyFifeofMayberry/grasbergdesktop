@@ -80,7 +80,7 @@ describe('DesktopControl', () => {
     expect(await control.run('screenshot')).toMatch(/1280x720/)
     expect(control.consumePendingScreenshot()).toBe('data:image/png;base64,1280x720')
     expect(control.consumePendingScreenshot()).toBeNull()
-    expect(notes).toEqual(['Grasberg is controlling your desktop'])
+    expect(notes).toEqual(['Warhawks is controlling your desktop'])
 
     expect(await control.run('double_click', [640, 360])).toMatch(/done/)
     expect(JSON.parse(log[0])).toEqual({ op: 'click', x: 1280, y: 720, button: 'left', count: 2 })

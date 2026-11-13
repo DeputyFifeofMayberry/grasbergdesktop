@@ -54,7 +54,7 @@ function useIdentities(handoff: MessageHandoff): { from: Identity; to: Identity 
     return found ?? { name: fallback, avatar: null }
   }
   return {
-    from: resolve(handoff.fromAgentId, handoff.fromName || 'Grasberg'),
+    from: resolve(handoff.fromAgentId, handoff.fromName || 'Warhawks'),
     to: resolve(handoff.toAgentId, handoff.toName),
   }
 }

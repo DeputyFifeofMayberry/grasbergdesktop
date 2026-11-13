@@ -12,7 +12,7 @@ import { useConversationsStore } from '@/stores/conversations'
 import { useUiStore } from '@/stores/ui'
 import { ProviderAddForm } from '../settings/ProviderAddForm'
 import LocalServerCard from '../settings/LocalServerCard'
-import appIcon from '@/assets/icon.png'
+import seal from '@/assets/ulm-seal.png'
 import '../settings/settings.css'
 
 const STEP_COUNT = 4
@@ -31,9 +31,9 @@ function WelcomeStep() {
   return (
     <div className="wizard-step">
       <div className="wizard-logo" aria-hidden="true">
-        <img src={appIcon} width={56} height={56} alt="" draggable={false} />
+        <img className="onboarding-seal" src={seal} width={56} height={56} alt="" draggable={false} />
       </div>
-      <h1>Grasberg</h1>
+      <h1>Warhawks</h1>
       <p className="wizard-pitch">
         One fast, local-first desktop client for OpenAI, Anthropic, Google Gemini, Amazon Bedrock,
         DeepSeek, GLM, MiniMax and 120+ OpenAI-compatible providers — chat with the model you want,

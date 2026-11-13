@@ -29,7 +29,7 @@ import { chatParamsSchema, settingsPatchSchema, workflowGraphSchema } from '@sha
 import type { AppDatabase } from '../db/database'
 
 export const BACKUP_FORMAT = 'grasberg-backup'
-/** Pre-rebrand marker ("Grasberg"); still accepted on import. */
+/** Older backup marker; still accepted on import. */
 export const LEGACY_BACKUP_FORMAT = 'grasberg-desktop-backup'
 /**
  * v3: the two-mode model — legacy modes remap to 'work' on import.
@@ -150,8 +150,8 @@ export class BackupImports {
     let raw: unknown
     try { raw = JSON.parse(json) } catch { throw new Error('The selected file is not valid JSON.') }
     const parsed = envelopeSchema.safeParse(raw)
-    if (!parsed.success) throw new Error('Not a Grasberg backup file.')
-    if (parsed.data.version > BACKUP_VERSION) throw new Error('This backup needs a newer version of Grasberg.')
+    if (!parsed.success) throw new Error('Not a Warhawks backup file.')
+    if (parsed.data.version > BACKUP_VERSION) throw new Error('This backup needs a newer version of Warhawks.')
     const data = parsed.data
     const counts: BackupSummary = { settingsApplied: 0, memoriesImported: 0, skillsImported: 0, conversationsImported: 0, promptsImported: 0, workflowsImported: 0, skippedItems: 0 }
     for (const key of Object.keys(DEFAULT_SETTINGS)) {
@@ -342,12 +342,12 @@ function parseObjectOf<T>(schema: z.ZodType<T>, value: unknown): T | undefined {
 
 /**
  * Applies a parsed backup file to the database. Throws only when `raw` is not
- * a Grasberg backup at all; individually invalid entries are skipped.
+ * a Warhawks backup at all; individually invalid entries are skipped.
  */
 export function applyBackup(db: AppDatabase, raw: unknown): BackupSummary {
   const envelope = envelopeSchema.safeParse(raw)
   if (!envelope.success) {
-    throw new Error('Not a Grasberg backup file.')
+    throw new Error('Not a Warhawks backup file.')
   }
   const data = envelope.data
   const summary: BackupSummary = {

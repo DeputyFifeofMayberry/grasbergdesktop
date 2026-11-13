@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { AppInfo } from '@shared/types'
 import { errorMessage } from '@/api/uld'
 import { useUiStore } from '@/stores/ui'
+import seal from '@/assets/ulm-seal.png'
 
 const PLATFORM_LABELS: Record<AppInfo['platform'], string> = {
   darwin: 'macOS',
@@ -60,6 +61,9 @@ export default function AboutTab() {
           <h3>About</h3>
         </div>
       </header>
+
+      <img className="onboarding-seal" src={seal} width={56} height={56} alt="" draggable={false} />
+      <h4>Warhawks</h4>
 
       {error ? (
         <p className="form-error" role="alert">
@@ -137,7 +141,7 @@ export default function AboutTab() {
       </dl>
 
       <p className="field-hint about-licenses">
-        Grasberg is released under the MIT license. It is built with open-source
+        Warhawks is released under the MIT license. It is built with open-source
         software, including Electron, React, zustand and node-sqlite3-wasm — each distributed under
         its own permissive license.
       </p>

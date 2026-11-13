@@ -151,10 +151,10 @@ describe('applyBackup', () => {
   })
 
   it('rejects files without the format marker', () => {
-    expect(() => applyBackup(target, { hello: 'world' })).toThrow(/not a grasberg/i)
-    expect(() => applyBackup(target, null)).toThrow(/not a grasberg/i)
+    expect(() => applyBackup(target, { hello: 'world' })).toThrow(/not a warhawks/i)
+    expect(() => applyBackup(target, null)).toThrow(/not a warhawks/i)
     expect(() => applyBackup(target, { format: 'other-backup', version: 1 })).toThrow(
-      /not a grasberg/i
+      /not a warhawks/i
     )
   })
 

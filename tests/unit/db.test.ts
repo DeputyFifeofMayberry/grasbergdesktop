@@ -865,6 +865,12 @@ describe('conversations + messages', () => {
 describe('settings repository', () => {
   it('returns DEFAULT_SETTINGS on an empty database', () => {
     expect(db!.settings.get()).toEqual(DEFAULT_SETTINGS)
+    expect(db!.settings.get().theme).toBe('dark')
+  })
+
+  it('preserves a saved system theme', () => {
+    db!.settings.update({ theme: 'system' })
+    expect(reopen().settings.get().theme).toBe('system')
   })
 
   it('update persists a patch and merges it over defaults', () => {

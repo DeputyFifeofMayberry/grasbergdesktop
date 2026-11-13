@@ -1,8 +1,8 @@
 {
   "name": "grasberg",
-  "productName": "Grasberg",
+  "productName": "Warhawks",
   "version": "1.1.0",
-  "description": "Local-first desktop client for every major LLM provider (OpenAI, Anthropic, Google Gemini, Amazon Bedrock, DeepSeek, GLM/Zhipu AI, MiniMax, and 120+ OpenAI-compatible presets). Chat and agentic Work modes with secure key storage and SQLite-backed history.",
+  "description": "Warhawks is a local-first desktop client for every major LLM provider (OpenAI, Anthropic, Google Gemini, Amazon Bedrock, DeepSeek, GLM/Zhipu AI, MiniMax, and 120+ OpenAI-compatible presets). Chat and agentic Work modes with secure key storage and SQLite-backed history.",
   "main": "./out/main/index.js",
   "author": "Grasberg contributors",
   "license": "MIT",

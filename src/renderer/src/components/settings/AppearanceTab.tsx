@@ -105,13 +105,13 @@ export default function AppearanceTab() {
           <span>
             Keep running when the window is closed
             <span className="field-hint">
-              Closing the window hides Grasberg to the tray icon; routines, bot heartbeats,
+              Closing the window hides Warhawks to the tray icon; routines, bot heartbeats,
               deliveries and Telegram bindings keep running. Quit from the tray menu.
             </span>
           </span>
         </label>
       ) : (
-        <p className="field-hint">macOS keeps Grasberg running after the window is closed.</p>
+        <p className="field-hint">macOS keeps Warhawks running after the window is closed.</p>
       )}
       {!/linux/i.test(navigator.platform) ? (
         <label className="field-checkbox">
@@ -121,7 +121,7 @@ export default function AppearanceTab() {
             onChange={(e) => void persist({ launchAtLogin: e.target.checked })}
           />
           <span>
-            Start Grasberg when I sign in
+            Start Warhawks when I sign in
             <span className="field-hint">
               Starts hidden in the tray when background mode is on, so routines are on schedule
               from the first minute.

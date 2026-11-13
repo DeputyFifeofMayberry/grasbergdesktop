@@ -283,7 +283,7 @@ export default function App(): React.JSX.Element {
   }, [])
 
   // Theme resolution -> <html data-theme> + ui.resolvedTheme.
-  const theme = settings?.theme ?? 'system'
+  const theme = settings?.theme ?? 'dark'
   useEffect(() => {
     const apply = (resolved: 'light' | 'dark'): void => {
       document.documentElement.dataset.theme = resolved

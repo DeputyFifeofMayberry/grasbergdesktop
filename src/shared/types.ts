@@ -1237,7 +1237,7 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  theme: 'system',
+  theme: 'dark',
   defaultProviderId: null,
   defaultModelId: null,
   perModeModelsEnabled: false,

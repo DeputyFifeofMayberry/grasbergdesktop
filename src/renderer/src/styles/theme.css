@@ -1,9 +1,27 @@
 /*
  * Design tokens for Grasberg.
  * The resolved theme is applied by App.tsx as <html data-theme="light|dark">.
- * :root carries the dark values as a fallback so first paint (before settings
- * load) matches the near-black background set inline in index.html.
+ * :root carries the dark values as a fallback before settings load.
  */
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/BarlowCondensed-500.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/BarlowCondensed-600.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('../assets/fonts/BarlowCondensed-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
 
 :root {
   /* Shared, theme-independent tokens */
@@ -15,64 +33,69 @@
     Arial, 'Noto Sans', sans-serif;
   --font-mono:
     ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-
-  /* Dark fallback (mirrors [data-theme='dark'] below) */
-  --bg: #0b0d12;
-  --bg-panel: #12151d;
-  --bg-hover: #1a1f2a;
-  --bg-active: #232a3a;
-  --text: #e7eaf2;
-  --text-muted: #99a3b8;
-  --border: #262c3a;
-  --accent: #7c8cff;
-  --accent-hover: #96a3ff;
-  --accent-text: #0b0d12;
-  --danger: #ff7369;
-  --success: #4cd6a2;
-  --warning: #f0b64a;
-  --code-bg: #161a24;
-  --shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
-
-  color-scheme: dark;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', 'Segoe UI', sans-serif;
 }
 
+:root,
 [data-theme='dark'] {
-  --bg: #0b0d12;
-  --bg-panel: #12151d;
-  --bg-hover: #1a1f2a;
-  --bg-active: #232a3a;
-  --text: #e7eaf2;
-  --text-muted: #99a3b8;
-  --border: #262c3a;
-  --accent: #7c8cff;
-  --accent-hover: #96a3ff;
-  --accent-text: #0b0d12;
-  --danger: #ff7369;
-  --success: #4cd6a2;
+  --bg: #0c0a0b;
+  --bg-panel: #151112;
+  --bg-hover: #211a1c;
+  --bg-active: #2c2225;
+  --text: #f5efea;
+  --text-muted: #b9a9a6;
+  --border: #302426;
+  --accent: #FDB913;
+  --accent-hover: #ffc94a;
+  --accent-text: #2a1600;
+  --danger: #ff6b6b;
+  --success: #5fd3a3;
   --warning: #f0b64a;
-  --code-bg: #161a24;
-  --shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
-
+  --code-bg: #171214;
+  --shadow: 0 18px 48px rgba(0, 0, 0, .55);
+  --shell: #4a0018;
+  --shell-raised: #5c0020;
+  --shell-border: #7a1734;
+  --mode-chat: #f2a0b6;
+  --mode-work: #FDB913;
+  --mode-bots: #c8c9c7;
+  --primary: #FDB913;
+  --primary-hover: #ffc94a;
+  --primary-text: #2a1600;
+  --sidebar-mode-chat: #f2a0b6;
+  --sidebar-mode-work: #FDB913;
+  --sidebar-mode-bots: #c8c9c7;
   color-scheme: dark;
 }
 
 [data-theme='light'] {
-  --bg: #faf8f4;
-  --bg-panel: #f2efe8;
-  --bg-hover: #eae6dc;
-  --bg-active: #e1dccf;
-  --text: #23272f;
-  --text-muted: #5b6272;
-  --border: #ddd7c9;
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
-  --accent-text: #ffffff;
-  --danger: #c0261c;
+  --bg: #faf6f1;
+  --bg-panel: #fff;
+  --bg-hover: #f3e9e1;
+  --bg-active: #eadbd0;
+  --text: #231a1c;
+  --text-muted: #6f6062;
+  --border: #ded2c8;
+  --accent: #840029;
+  --accent-hover: #6b0021;
+  --accent-text: #fff;
+  --danger: #b3261e;
   --success: #0f7a56;
-  --warning: #8f5f00;
-  --code-bg: #efece3;
-  --shadow: 0 10px 32px rgba(38, 35, 27, 0.14);
-
+  --warning: #8a5a00;
+  --code-bg: #f3ece6;
+  --shadow: 0 18px 48px rgba(43, 20, 10, .14);
+  --shell: #840029;
+  --shell-raised: #6b0021;
+  --shell-border: #a33b58;
+  --mode-chat: #840029;
+  --mode-work: #8a5a00;
+  --mode-bots: #646469;
+  --primary: #FDB913;
+  --primary-hover: #ffc94a;
+  --primary-text: #2a1600;
+  --sidebar-mode-chat: #f2a0b6;
+  --sidebar-mode-work: #FDB913;
+  --sidebar-mode-bots: #c8c9c7;
   color-scheme: light;
 }
 
